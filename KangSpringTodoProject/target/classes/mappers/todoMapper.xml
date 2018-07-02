@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kang.mapper.TodoMapper">
+	<select id="selectUser" resultType="com.kang.model.User">
+		select * from user
+		where id =
+		#{id}
+	</select>
+
+	<insert id="insertUser">
+		insert into
+		user(id,password,name,email,addr,gender,enabled,authority)
+		values(#{id},#{password},#{name},#{email},#{addr},#{gender},1,'ROLE_USER')
+	</insert>
+
+	<select id="idCk" resultType="java.lang.String">
+		select id from user
+		where id = #{id}
+	</select>
+
+	<insert id="insertTodo" parameterType="hashmap"> <!-- Map 타입으로 여려 데이터를 받을려면 parameterType="hashmap"을 써줘야 한다 그러면 해당키의 .컬럼명 
+			으로 접근가능하다. -->
+		insert into
+		todo(id,todosubject,todocontent,cano,todostartdate,todoenddate)
+		values(#{userId},#{todo.todosubject},#{todo.todocontent},#{todo.cano},#{todo.todostartdate},#{todo.todoenddate})
+	</insert>
+	<select id="todoCount" resultType="int">
+		select count(*) from todo
+		where id = #{id}
+	</select>
+	<select id="todoList" parameterType="hashmap" resultType="com.kang.model.Todo">
+		select
+		* from todo where id = #{id} order by createtododate limit
+		#{start},#{pageGroup}
+	</select>
+	<select id="todoDetail" resultType="com.kang.model.Todo">
+		select * from todo where todono = #{todono}
+	</select>
+	<update id="todoCompleteUpdate" parameterType="hashmap" >
+		update todo set completion = #{completion} where todono = #{todono}
+	</update>
+	<select id="todoCompletionSelect" resultType="boolean"> 
+		select completion from todo where todono = #{todono}
+	</select>
+	<delete id="delete">
+		delete from todo where todono = #{todono}
+	</delete>
+	<update id="update">
+		update todo set todosubject = #{todosubject}, todocontent = #{todocontent} , cano = #{cano} ,todostartdate = #{todostartdate}, todoenddate = #{todoenddate} 
+		where todono = #{todono}
+	</update>
+</mapper>
